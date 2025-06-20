@@ -7,7 +7,7 @@ resource "github_repository" "terraform-repo" {
   count       = var.repo_count
   name        = "terraform-repo-${random_id.random[count.index].dec}"
   description = "Code for Terraform"
-  visibility  = "public"
+  visibility  = var.env == "dev" ? "private" : "public"
   auto_init   = true
 }
 
@@ -16,7 +16,7 @@ resource "github_repository_file" "readme" {
   repository          = github_repository.terraform-repo[count.index].name
   branch              = "main"
   file                = "Readme.md"
-  content             = "# This repository is for Infra Devs"
+  content             = "# This $(var.env) repository is for Infra Devs"
   overwrite_on_create = true
 }
 
