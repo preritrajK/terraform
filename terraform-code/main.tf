@@ -29,7 +29,8 @@ resource "github_repository_file" "index" {
   overwrite_on_create = "true"
 }
 
-output "repo-names" {
-  value       = github_repository.terraform-repo[*].name
-  description = "Repository Identifiers/Names"
+output "clone-urls" {
+  value       = { for i in github_repository.terraform-repo[*] : i.name => i.http_clone_url }
+  description = "Repository URLs/Names"
+  sensitive   = false
 }
