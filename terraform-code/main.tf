@@ -12,3 +12,11 @@ resource "github_repository_file" "readme" {
   content             = "# This repository is for Infra Devs"
   overwrite_on_create = true
 }
+
+resource "github_repository_file" "index" {
+  repository = github_repository.terraform-repo.name
+  branch = "main"
+  file = "index.html"
+  content = "Hello Terraform"
+  overwrite_on_create = "true"
+} 
