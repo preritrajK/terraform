@@ -29,7 +29,7 @@ variable "repos" {
   type        = set(string)
   description = "Repos"
   validation {
-    condition = length(var.repos) <= var.repo_max
+    condition     = length(var.repos) <= var.repo_max
     error_message = "Do not deploy more than repo max allows"
   }
 }

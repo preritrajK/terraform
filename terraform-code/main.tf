@@ -9,6 +9,9 @@ resource "github_repository" "terraform-repo" {
   description = "${each.key} Code for Terraform"
   visibility  = var.env == "dev" ? "private" : "public"
   auto_init   = true
+  provisioner "local-exec" {
+    command = "gh repo view $(self.name) --web"
+  }
 }
 
 resource "github_repository_file" "readme" {
