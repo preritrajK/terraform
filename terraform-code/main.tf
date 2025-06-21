@@ -1,19 +1,19 @@
-resource "random_id" "random" {
-  byte_length = 2
-  count       = var.repo_count
-}
+# resource "random_id" "random" {
+#   byte_length = 2
+#   count       = var.repo_count
+# }
 
 resource "github_repository" "terraform-repo" {
-  count       = var.repo_count
-  name        = "terraform-repo-${random_id.random[count.index].dec}"
-  description = "Code for Terraform"
+  for_each    = var.repos
+  name        = "terraform-repo-${each.key}"
+  description = "${each.key} Code for Terraform"
   visibility  = var.env == "dev" ? "private" : "public"
   auto_init   = true
 }
 
 resource "github_repository_file" "readme" {
-  count               = var.repo_count
-  repository          = github_repository.terraform-repo[count.index].name
+  for_each            = var.repos
+  repository          = github_repository.terraform-repo[each.key].name
   branch              = "main"
   file                = "Readme.md"
   content             = "# This $(var.env) repository is for Infra Devs"
@@ -21,8 +21,8 @@ resource "github_repository_file" "readme" {
 }
 
 resource "github_repository_file" "index" {
-  count               = var.repo_count
-  repository          = github_repository.terraform-repo[count.index].name
+  for_each            = var.repos
+  repository          = github_repository.terraform-repo[each.key].name
   branch              = "main"
   file                = "index.html"
   content             = "Hello Terraform"
